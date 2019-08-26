@@ -29,14 +29,21 @@ namespace WebApplication1.Controllers
         /// </summary>
         public async Task<IActionResult> Count(string linkShort)
         {
-            
             Link link = await _context.Link.FirstOrDefaultAsync(s => s.ShortURL == linkShort);
-            link.Count++;
+            if (link != null)
+            {
+                link.Count++;
 
-            _context.Update(link);
-            await _context.SaveChangesAsync();
+                _context.Update(link);
+                await _context.SaveChangesAsync();
 
-            return View(link);
+                return View(link);
+            }
+            else
+            {
+                return NotFound("Ссылка не найдена");
+            }
+            
         }
 
         // GET: Вывод информации о ссылке
@@ -169,8 +176,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var link = await _context.Link
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var link = await _context.Link.FirstOrDefaultAsync(m => m.Id == id);
             if (link == null)
             {
                 return NotFound();
