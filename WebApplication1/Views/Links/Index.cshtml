@@ -34,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.LongURL)
             </td>
             <td>
-                <a asp-action="Count" asp-route-id="@item.ShortURL">@item.ShortURL</a>
+                <a href="@item.ShortURL">@item.ShortURL</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateCcreation)
