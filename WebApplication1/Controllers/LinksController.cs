@@ -55,13 +55,31 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,LongURL,ShortURL,DateCcreation,Count")] Link link)
         {
-            if (ModelState.IsValid)
+            string shortLink = string.Empty;
+            IEnumerable<Link> links;
+
+            //Проверка сущетвует ли сгенерированная ссылка в БД
+            while (true)
             {
-                _context.Add(link);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Генерируем пароль
+                shortLink = LinkGenerator.GeneratorShort();
+                // Проверяем есть ли сущности в БД с созданым паролем
+                links = _context.Link.Where(s => s.ShortURL == shortLink);
+
+                // Если сущностей нет выходит из цикла иначе цикл выполняется по новому
+                if (links.Count() == 0)
+                {
+                    break;
+                }
             }
-            return View(link);
+
+            link.ShortURL = shortLink;
+            // Записываем дату создания
+            link.DateCcreation = DateTime.Now;
+            link.Count = 0;
+            _context.Add(link);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Links/Edit/5
