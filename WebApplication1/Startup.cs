@@ -57,13 +57,15 @@ namespace WebApplication1
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
             app.UseMvc(routes =>
             {
+                routes.MapRoute("countLinks", "/{link}", new { controller = "Links", action = "Count" });
+
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Links}/{action=Index}/{id?}");
+                name: "default",
+                template: "{controller=Links}/{action=Index}/{id?}");
             });
+
         }
     }
 }
