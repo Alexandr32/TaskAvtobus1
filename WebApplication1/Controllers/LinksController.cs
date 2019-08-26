@@ -61,8 +61,8 @@ namespace WebApplication1.Controllers
             //Проверка сущетвует ли сгенерированная ссылка в БД
             while (true)
             {
-                // Генерируем пароль
-                shortLink = LinkGenerator.GeneratorShort();
+                // Генерируемая ссылка
+                shortLink = HttpContext.Request.Host.Value.ToString() + LinkGenerator.GeneratorShort();
                 // Проверяем есть ли сущности в БД с созданым паролем
                 links = _context.Link.Where(s => s.ShortURL == shortLink);
 
