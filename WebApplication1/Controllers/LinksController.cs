@@ -41,8 +41,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var link = await _context.Link
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var link = await _context.Link.FirstOrDefaultAsync(m => m.Id == id);
             if (link == null)
             {
                 return NotFound();
@@ -65,21 +64,18 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Create([Bind("Id,LongURL,ShortURL")] Link link)
         {
             string shortLink = string.Empty;
-            IEnumerable<Link> links;
 
             //Проверка сущетвует ли сгенерированная ссылка в БД
             while (true)
             {
                 // Генерируемая ссылка
                 shortLink = LinkGenerator.GeneratorShort();
-                // Проверяем есть ли сущности в БД с созданым паролем
-                links = _context.Link.Where(s => s.ShortURL == shortLink);
-
-                // Если сущностей нет выходит из цикла иначе цикл выполняется по новому
-                if (links.Count() == 0)
+                // Проверка на соответсвие
+                if (!DuplicationCheck(shortLink))
                 {
                     break;
                 }
+                
             }
 
             link.ShortURL = shortLink;
@@ -127,13 +123,21 @@ namespace WebApplication1.Controllers
             {
                 try
                 {
-                    // Оставляем дату
-                    editLink.DateCcreation = (DateTime) TempData["DateCcreation"];
-                    // Оставляем счетчик
-                    editLink.Count = (int) TempData["Count"];
+                    // Проверяем есть ли данная сылка
+                    if (!DuplicationCheck(editLink.ShortURL))
+                    {
+                        // Оставляем дату
+                        editLink.DateCcreation = (DateTime)TempData["DateCcreation"];
+                        // Оставляем счетчик
+                        editLink.Count = (int)TempData["Count"];
 
-                    _context.Update(editLink);
-                    await _context.SaveChangesAsync();
+                        _context.Update(editLink);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        return NotFound("Данная сылка уже существует");
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -151,7 +155,7 @@ namespace WebApplication1.Controllers
             return View(editLink);
         }
 
-        // GET: Links/Delete/5
+        // GET: Удаление ссылки
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -184,5 +188,26 @@ namespace WebApplication1.Controllers
         {
             return _context.Link.Any(e => e.Id == id);
         }
+
+        /// <summary>
+        /// Проверка существует ли данная ссылка в таблице
+        /// </summary>
+        /// <returns>True - существует, False - не существует</returns>
+        private bool DuplicationCheck(string shortLink)
+        {
+            // Проверяем есть ли сущности в БД с созданой ссылкой
+            IEnumerable<Link> links = _context.Link.Where(s => s.ShortURL == shortLink);
+
+            if (links.Count() == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+        }
+
     }
 }
