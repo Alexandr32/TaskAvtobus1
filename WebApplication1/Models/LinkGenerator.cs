@@ -22,7 +22,7 @@ namespace WebApplication1.Models
                 resul += RandomCharacterGenerator().ToString();
             }
 
-            return string.Format("/{0}/", resul);
+            return string.Format("/{0}", resul);
         }
 
         /// <summary>
