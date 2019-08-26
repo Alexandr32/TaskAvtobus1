@@ -24,6 +24,15 @@ namespace WebApplication1.Controllers
             return View(await _context.Link.ToListAsync());
         }
 
+        /// <summary>
+        /// Метод для подсчета переходов
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> Count()
+        {
+            return View(await _context.Link.ToListAsync());
+        }
+
         // GET: Links/Details/5
         public async Task<IActionResult> Details(int? id)
         {
