@@ -62,7 +62,7 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,LongURL,ShortURL,DateCcreation,Count")] Link link)
+        public async Task<IActionResult> Create([Bind("Id,LongURL,ShortURL")] Link link)
         {
             string shortLink = string.Empty;
             IEnumerable<Link> links;
@@ -90,7 +90,7 @@ namespace WebApplication1.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        
         // GET: Links/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -100,6 +100,10 @@ namespace WebApplication1.Controllers
             }
 
             var link = await _context.Link.FindAsync(id);
+            // Дата создания и счетчик не меняется при редактировании сохраняем 
+            // значение для вставки после редактирования
+            TempData["DateCcreation"] = link.DateCcreation;
+            TempData["Count"] = link.Count;
             if (link == null)
             {
                 return NotFound();
@@ -112,9 +116,9 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LongURL,ShortURL,DateCcreation,Count")] Link link)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,LongURL,ShortURL")] Link editLink)
         {
-            if (id != link.Id)
+            if (id != editLink.Id)
             {
                 return NotFound();
             }
@@ -123,12 +127,17 @@ namespace WebApplication1.Controllers
             {
                 try
                 {
-                    _context.Update(link);
+                    // Оставляем дату
+                    editLink.DateCcreation = (DateTime) TempData["DateCcreation"];
+                    // Оставляем счетчик
+                    editLink.Count = (int) TempData["Count"];
+
+                    _context.Update(editLink);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LinkExists(link.Id))
+                    if (!LinkExists(editLink.Id))
                     {
                         return NotFound();
                     }
@@ -139,7 +148,7 @@ namespace WebApplication1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(link);
+            return View(editLink);
         }
 
         // GET: Links/Delete/5
