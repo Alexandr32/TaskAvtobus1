@@ -33,7 +33,7 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        // GET: Links/Details/5
+        // GET: Вывод информации о ссылке
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -73,13 +73,13 @@ namespace WebApplication1.Controllers
                 // Проверка на соответсвие
                 if (!DuplicationCheck(shortLink))
                 {
+                    // Если сылки нет то выходим из цикла
                     break;
                 }
                 
             }
 
             link.ShortURL = shortLink;
-            // Записываем дату создания
             link.DateCcreation = DateTime.Now;
             link.Count = 0;
             _context.Add(link);
