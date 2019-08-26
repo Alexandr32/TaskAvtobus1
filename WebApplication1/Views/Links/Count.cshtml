@@ -1,7 +1,40 @@
-﻿@page
-@*@{
+﻿@model WebApplication1.Models.Link
+@{
     ViewData["Title"] = "Count";
-}*@
+}
 
-<h1>Count</h1>
+<h1>Кол-во переходов увеличелось ;-)</h1>
 
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LongURL)
+        </dt>
+        <dd class="col-sm-10">
+            <a href="@Model.LongURL">@Model.LongURL</a>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShortURL)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShortURL)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateCcreation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateCcreation)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Count)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Count)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Index">Назад к списку</a>
+</div>

@@ -27,10 +27,16 @@ namespace WebApplication1.Controllers
         /// <summary>
         /// Метод для подсчета переходов
         /// </summary>
-        /// <returns></returns>
-        public IActionResult Count()
+        public async Task<IActionResult> Count(string linkShort)
         {
-            return View();
+            
+            Link link = await _context.Link.FirstOrDefaultAsync(s => s.ShortURL == linkShort);
+            link.Count++;
+
+            _context.Update(link);
+            await _context.SaveChangesAsync();
+
+            return View(link);
         }
 
         // GET: Вывод информации о ссылке

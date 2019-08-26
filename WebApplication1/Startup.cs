@@ -59,7 +59,7 @@ namespace WebApplication1
             app.UseCookiePolicy();
             app.UseMvc(routes =>
             {
-                routes.MapRoute("countLinks", "/{link}", new { controller = "Links", action = "Count" });
+                routes.MapRoute("countLinks", "/{linkShort}", new { controller = "Links", action = "Count" });
 
                 routes.MapRoute(
                 name: "default",
