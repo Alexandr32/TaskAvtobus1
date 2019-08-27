@@ -231,23 +231,18 @@ namespace WebApplication1.Controllers
             return _context.Link.Any(e => e.Id == id);
         }
 
+        //private bool LinkExists(int id)
+        //{
+        //    return _context.Link.Any(e => e.Id == id);
+        //}
+
         /// <summary>
         /// Проверка существует ли данная ссылка в таблице
         /// </summary>
         /// <returns>True - существует, False - не существует</returns>
         private bool DuplicationCheck(string shortLink)
         {
-            // Проверяем есть ли сущности в БД с созданой ссылкой
-            IEnumerable<Link> links = _context.Link.Where(s => s.ShortURL == shortLink);
-
-            if (links.Count() == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return _context.Link.Any(e => e.ShortURL == shortLink);
         }
     }
 }
