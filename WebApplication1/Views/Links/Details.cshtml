@@ -16,13 +16,13 @@
             @Html.DisplayNameFor(model => model.LongURL)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LongURL)
+            <a href="@Model.LongURL">@Model.LongURL</a>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ShortURL)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ShortURL)
+            <a href="@Model.ShortURL">@Model.ShortURL</a>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DateCcreation)
