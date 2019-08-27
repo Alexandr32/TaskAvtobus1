@@ -46,7 +46,11 @@ namespace WebApplication1.Controllers
             
         }
 
-        // GET: Вывод информации о ссылке
+        /// <summary>
+        /// GET: Вывод информации о ссылке
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>id записи</returns>
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -63,30 +67,36 @@ namespace WebApplication1.Controllers
             return View(link);
         }
 
-        // GET: Links/Create
+        /// <summary>
+        /// GET: Links/Create создание новой записи
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Links/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// POST: Links/Create создание новой записи
+        /// </summary>
+        /// <param name="link">Созданая сулка по данным введеных в форму</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,LongURL,ShortURL")] Link link)
         {
+            // Короткая ссылка
             string shortLink = string.Empty;
 
             //Проверка сущетвует ли сгенерированная ссылка в БД
             while (true)
             {
-                // Генерируемая ссылка
+                // Генерируем ссылку
                 shortLink = LinkGenerator.GeneratorShort();
                 // Проверка на соответсвие
                 if (!DuplicationCheck(shortLink))
                 {
-                    // Если сылки нет то выходим из цикла
+                    // Если ссылки нет то выходим из цикла
                     break;
                 }
                 
@@ -99,8 +109,12 @@ namespace WebApplication1.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        
-        // GET: Links/Edit/5
+
+        /// <summary>
+        /// GET: Links/Edit/5 Редактирование
+        /// </summary>
+        /// <param name="id">id записи</param>
+        /// <returns></returns>
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -120,9 +134,12 @@ namespace WebApplication1.Controllers
             return View(link);
         }
 
-        // POST: Links/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// POST: Links/Edit/5
+        /// </summary>
+        /// <param name="id">id записи</param>
+        /// <param name="editLink">Отредактированая ссылка по даннм из формы</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,LongURL,ShortURL")] Link editLink)
@@ -168,7 +185,11 @@ namespace WebApplication1.Controllers
             return View(editLink);
         }
 
-        // GET: Удаление ссылки
+        /// <summary>
+        /// GET: Удаление ссылки
+        /// </summary>
+        /// <param name="id">id записи</param>
+        /// <returns></returns>
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -185,7 +206,11 @@ namespace WebApplication1.Controllers
             return View(link);
         }
 
-        // POST: Links/Delete/5
+        /// <summary>
+        /// POST: Links/Delete/5
+        /// </summary>
+        /// <param name="id">id удаляемой записи</param>
+        /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -196,6 +221,11 @@ namespace WebApplication1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Проверка на существование записи в БД
+        /// </summary>
+        /// <param name="id">id записи</param>
+        /// <returns></returns>
         private bool LinkExists(int id)
         {
             return _context.Link.Any(e => e.Id == id);
