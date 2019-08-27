@@ -12,12 +12,12 @@ namespace WebApplication1.Models
         /// <summary>
         /// Длинные ссылки
         /// </summary>
-        [Required, Display(Name = "Длинный URL")] // проверка на пробелы
+        [Required, Display(Name = "Длинный URL"), RegularExpression(@"[^\s]*")] // проверка на пробелы
         public string LongURL { get; set; }
         /// <summary>
         /// Короткий URL
         /// </summary>
-        [Required, Display(Name = "Короткий URL")] // проверка на пробелы
+        [Required, Display(Name = "Короткий URL"), RegularExpression(@"[^\s]*")]
         public string ShortURL { get; set; }
         /// <summary>
         /// Дата создания
