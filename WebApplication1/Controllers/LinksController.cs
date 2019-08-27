@@ -231,11 +231,6 @@ namespace WebApplication1.Controllers
             return _context.Link.Any(e => e.Id == id);
         }
 
-        //private bool LinkExists(int id)
-        //{
-        //    return _context.Link.Any(e => e.Id == id);
-        //}
-
         /// <summary>
         /// Проверка существует ли данная ссылка в таблице
         /// </summary>
